@@ -15,7 +15,11 @@ load_dotenv()
 
 
 
-download_dir = "/Users/NicolasCw/Desktop/desarrollo/analisis_algoritmos/assets"  # Cambia a la ruta donde quieres que se guarden las descargas
+#download_dir = "/Users/NicolasCw/Desktop/desarrollo/analisis_algoritmos/assets" 
+#TODO: cambiar la ruta de descarga dependiendo del sistema 
+# operativo winndows o mac os cada ruta depdende de donde almaceno el proyecto
+download_dir = r"E:\celuweb\analisis_algoritmos\assets"  # Cambia a la ruta correcta
+
 
 def wait_for_downloads(download_dir):
     # Esperar mientras haya archivos con la extensión ".crdownload"
@@ -28,11 +32,13 @@ def wait_for_downloads(download_dir):
 
 chrome_options = Options()
 chrome_options.add_experimental_option("prefs", {
-  "download.default_directory": download_dir,  # Establece la carpeta de descargas
-  "download.prompt_for_download": False,  # No preguntar por la ubicación de la descarga
-  "download.directory_upgrade": True,  # Actualizar el directorio de descargas si ya está configurado
-  "safebrowsing.enabled": True  # Habilitar el modo de descarga segura
+  "download.default_directory": download_dir,  # Carpeta de descargas
+  "download.prompt_for_download": False,  # No mostrar cuadros de diálogo
+  "download.directory_upgrade": True,
+  "safebrowsing.enabled": True,
+  "profile.default_content_settings.popups": 0  # Deshabilitar ventanas emergentes para descargas
 })
+
 
 
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
@@ -57,9 +63,9 @@ element.send_keys(os.getenv('EMAIL'))
 element = driver.find_element(by=By.ID, value="identifierNext")
 element.click()
 
-time.sleep(2)
+time.sleep(5)
 element = driver.find_element(By.XPATH, '//*[@id="password"]/div[1]/div/div[1]/input')
-element.send_keys(os.getenv('CONTRASENA'))
+element.send_keys(os.getenv('PSWD'))
 # Hacer clic en el botón "Siguiente"2
 element = driver.find_element(by=By.XPATH, value='//*[@id="passwordNext"]/div/button')
 element.click()
@@ -82,7 +88,7 @@ print('escrito')
 search_button = driver.find_element(by=By.XPATH, value="//button[span[text()='Search']]")
 search_button.click()
 
-driver.implicitly_wait(10)
+driver.implicitly_wait(15)
 element = driver.find_element("xpath", '//input[@aria-label="from"]')
 element.send_keys('2020')
 
@@ -108,66 +114,6 @@ data = re.findall(r'\d+', documents.text.replace(',',''))
 docs = int(data[0])
 print('numero de documentos:  '+ str(docs))
 
-# if docs >  2000:
-#     i = docs/2000
-#     i = int(i)
-#     initial = 1
-#     end = 1000
-#     for x in range(i):
-#         print('iteracion: ' + str(x))
-#         if x >= 1:
-#             progress_bar = driver.find_element(By.CSS_SELECTOR, "progress[aria-label='60% completed']")
-#             percent = int(progress_bar.get_attribute("value"))
-#             while percent < 100:
-#                 time.sleep(1)
-#                 progress_bar = driver.find_element(By.CSS_SELECTOR, "progress[aria-label='60% completed']")
-#                 percent = int(progress_bar.get_attribute("value"))
-                
-#             wait_for_downloads(download_dir)
-#             close_button = driver.find_element(By.CSS_SELECTOR, "button[aria-label='close']")
-#             close_button.click()
-
-            
-            
-            
-#         dropdown = driver.find_element(by=By.XPATH, value="//button[span[text()='Export']]")
-#         print('encontrado')
-#         dropdown.click()
-#         print('click')
-
-#         time.sleep(5)
-
-#         csv = driver.find_element(by=By.XPATH, value="//button[span[text()='CSV']]")
-#         print('encontrado')
-#         csv.click()
-#         print('click')
-    
-#         radioButtom = driver.find_element(by=By.ID, value="select-range")
-#         radioButtom.click()
-    
-#         fromData = driver.find_element(By.CSS_SELECTOR, 'input[placeholder="From"]')
-#         fromData.clear()
-    
-#         fromData.send_keys(initial)
-    
-    
-#         toData = driver.find_element(By.CSS_SELECTOR, value="input[placeholder=To]")
-#         toData.clear()
-#         toData.send_keys(str(end))
-    
-#         time.sleep(2)
-#         submit_button = driver.find_element(By.CSS_SELECTOR, "button[data-testid='submit-export-button']")
-#         if submit_button.is_enabled():
-                        
-#             submit_button.click()
-
-#         initial = initial + 1000
-#         end = end + 1000
-    
-#         time.sleep(10)
-    
-    
-# else: 
 time.sleep(5)
 
 dropdown = driver.find_element(by=By.XPATH, value="//button[span[text()='Export']]")
@@ -197,33 +143,27 @@ submit_button = driver.find_element(By.CSS_SELECTOR, "button[data-testid='submit
 if submit_button.is_enabled():
     submit_button.click()
 
+time.sleep(10)
 
-time.sleep(5)
+progress_bar = driver.find_element(By.CSS_SELECTOR, "progress.PercentageBar-module__98Jio")
+percent = float(progress_bar.get_attribute("value"))
 
-#container > micro-ui > document-search-results-page > div.Toastify > div
-progress_bar = driver.find_element(By.CSS_SELECTOR, )
-percent = int(progress_bar.get_attribute("value"))
 while percent < 100:
     time.sleep(1)
-    progress_bar = driver.find_element(By.XPATH, "//div[@data-testid='file-type-success-message']")
     try:
-        progress_bar.get_attribute("value")
-        print('valor: ' + progress_bar.get_attribute("value"))
+        progress_bar = driver.find_element(By.CSS_SELECTOR, "progress.PercentageBar-module__98Jio")
+        percent = float(progress_bar.get_attribute("value"))
+    
+        print('valor: ' + str(percent))
     except:
         percent = 100
         break
     
-    
-        
-
 time.sleep(5)
      
-    
-
-
-
 # Espera implícita para el resto de la página
-driver.implicitly_wait(20)
+
+driver.quit()
 
 
 
