@@ -15,10 +15,10 @@ load_dotenv()
 
 
 
-#download_dir = "/Users/NicolasCw/Desktop/desarrollo/analisis_algoritmos/assets" 
+download_dir = "/Users/NicolasCw/Desktop/desarrollo/analisis_algoritmos/assets" 
 #TODO: cambiar la ruta de descarga dependiendo del sistema 
-# operativo winndows o mac os cada ruta depdende de donde almaceno el proyecto
-download_dir = r"E:\celuweb\analisis_algoritmos\assets"  # Cambia a la ruta correcta
+# operativo winndows o mac os cada ruta depdende de donde almaceno el proyecto 
+download_dir = r"E:\celuweb\analisis_algoritmos\assets"  # Cambia a la ruta correcta#
 
 
 def wait_for_downloads(download_dir):
