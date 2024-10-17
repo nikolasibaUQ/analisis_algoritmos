@@ -15,10 +15,10 @@ load_dotenv()
 
 
 
-download_dir = "/Users/NicolasCw/Desktop/desarrollo/analisis_algoritmos/assets" 
+# download_dir = "/Users/NicolasCw/Desktop/desarrollo/analisis_algoritmos/assets" 
 #TODO: cambiar la ruta de descarga dependiendo del sistema 
 # operativo winndows o mac os cada ruta depdende de donde almaceno el proyecto 
-# download_dir = r"E:\celuweb\analisis_algoritmos\assets"  # Cambia a la ruta correcta#
+download_dir = r"E:\celuweb\analisis_algoritmos\assets\sciense"  # Cambia a la ruta correcta#
 
 
 def wait_for_downloads(download_dir):
@@ -45,7 +45,7 @@ driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), opti
 
 
 # Abrir la página
-driver.get("https://www-sciencedirect-com.crai.referencistas.com/search?qs=computational%20thinking")
+driver.get("https://www-sciencedirect-com.crai.referencistas.com/search?qs=computational%20thinking&show=100")
 
 # Espera implícita para cargar elementos de la página
 # driver.implicitly_wait(10)
@@ -72,15 +72,43 @@ element.click()
 
 driver.implicitly_wait(10)
 
-results_per_page_100 = driver.find_element(By.CSS_SELECTOR, "a[data-aa-name='srp-100-results-per-page']")
-results_per_page_100.click()
-
-checkbox = driver.find_element(By.ID, "select-all-results")
-checkbox.click()
+# results_per_page_100 = driver.find_element(By.CSS_SELECTOR, "a[data-aa-name='srp-100-results-per-page']")
+# results_per_page_100.click()
 
 
-export_btn = driver.find_element(By.XPATH, '//*[@id="srp-toolbar"]/div[1]/span/span[1]/div[3]/button')
-export_btn.click()
+
+pagination_info = driver.find_element(By.CSS_SELECTOR, "ol#srp-pagination li")
+
+# Extraer el texto del elemento
+pagination_text = pagination_info.text
+
+# Extraer el número máximo de páginas del texto "Page 1 of 60"
+# Dividimos la cadena para obtener el número final
+max_pages = pagination_text.split(' ')[-1]
+
+
+i =1
+
+while i <= int(max_pages):
+    # checkbox = driver.find_element(By.ID, "select-all-results")
+  label = driver.find_element(By.CSS_SELECTOR, "label[for='select-all-results']")
+  label.click()
+  # checkbox.click()
+  export_btn = driver.find_element(By.XPATH, '//*[@id="srp-toolbar"]/div[1]/span/span[1]/div[3]/button')
+  export_btn.click()
+  export_button = driver.find_element(By.CSS_SELECTOR, "button[data-aa-button='srp-export-multi-bibtex']")
+  # Hacer clic en el botón
+  export_button.click()
+  time.sleep(2)
+  # driver.implicitly_wait(5)
+  next_button = driver.find_element(By.CSS_SELECTOR, 'a[data-aa-name="srp-next-page"]')
+
+# Forzar el clic en el botón "Next" utilizando JavaScript
+  driver.execute_script("arguments[0].click();", next_button)
+  time.sleep(2)
+  i += 1
+
+
 
 
 
@@ -88,4 +116,3 @@ export_btn.click()
 time.sleep(40)
 
 
-# <div class="checkbox SelectAllCheckbox"><label class="checkbox-label" for="select-all-results"><input id="select-all-results" type="checkbox" class="checkbox-input" aria-checked="false" aria-disabled="false" aria-label="Select all articles for download" autocomplete="off"><span class="checkbox-check"></span><span class="checkbox-label-value">Select all articles</span></label></div>
