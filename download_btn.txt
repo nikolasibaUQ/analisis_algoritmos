@@ -1,1 +1,0 @@
-<div class="modal__header"><button type="button" data-dismiss="modal" alt="close" class="close"><img src="/specs/products/sage/releasedAssets/images/close-a351a693d1ede9b5b4a494ad74053c83.svg" aria-hidden="true" class="main-menu__toggle-close"><span class="sr-only">Close</span></button><h3 class="modal__title">Export citation</h3></div>

@@ -14,20 +14,13 @@ load_dotenv()
 
 
 
-# download_dir = "/Users/NicolasCw/Desktop/desarrollo/analisis_algoritmos/assets" 
 #TODO: cambiar la ruta de descarga dependiendo del sistema 
 # operativo winndows o mac os cada ruta depdende de donde almaceno el proyecto 
-download_dir = r"E:\celuweb\analisis_algoritmos\assets\sciense"  # Cambia a la ruta correcta#
+download_dir = "/Users/NicolasCw/Desktop/desarrollo/analisis_algoritmos/assets/sciense" 
+# download_dir = r"E:\celuweb\analisis_algoritmos\assets\sciense"  # Cambia a la ruta correcta#
 
 
-def wait_for_downloads(download_dir):
-    # Esperar mientras haya archivos con la extensión ".crdownload"
-    while any([filename.endswith(".crdownload") for filename in os.listdir(download_dir)]):
-        print("Esperando a que la descarga termine...")
-        time.sleep(1)  # Espera un segundo antes de volver a comprobar
-        
 
-    print("Descarga completa.")
 
 chrome_options = Options()
 chrome_options.add_experimental_option("prefs", {

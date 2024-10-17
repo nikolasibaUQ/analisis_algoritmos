@@ -15,20 +15,12 @@ load_dotenv()
 
 
 
-download_dir = "/Users/NicolasCw/Desktop/desarrollo/analisis_algoritmos/assets" 
+download_dir = "/Users/NicolasCw/Desktop/desarrollo/analisis_algoritmos/assets/scopus" 
 #TODO: cambiar la ruta de descarga dependiendo del sistema 
 # operativo winndows o mac os cada ruta depdende de donde almaceno el proyecto 
-download_dir = r"E:\celuweb\analisis_algoritmos\assets\scopus"  # Cambia a la ruta correcta#
+# download_dir = r"E:\celuweb\analisis_algoritmos\assets\scopus"  # Cambia a la ruta correcta#
 
 
-def wait_for_downloads(download_dir):
-    # Esperar mientras haya archivos con la extensión ".crdownload"
-    while any([filename.endswith(".crdownload") for filename in os.listdir(download_dir)]):
-        print("Esperando a que la descarga termine...")
-        time.sleep(1)  # Espera un segundo antes de volver a comprobar
-        
-
-    print("Descarga completa.")
 
 chrome_options = Options()
 chrome_options.add_experimental_option("prefs", {
@@ -74,7 +66,7 @@ element.click()
 
 
 # time.sleep(20)
-driver.implicitly_wait(20)
+driver.implicitly_wait(10)
 
 # Buscar el campo de búsqueda
 input_element = driver.find_element(by=By.CLASS_NAME, value="styleguide-input-module___SqPU")
@@ -111,16 +103,16 @@ data = re.findall(r'\d+', documents.text.replace(',',''))
 docs = int(data[0])
 print('numero de documentos:  '+ str(docs))
 
-time.sleep(5)
+time.sleep(2)
 
 dropdown = driver.find_element(by=By.XPATH, value="//button[span[text()='Export']]")
 print('encontrado')
 dropdown.click()
 print('click')
 
-time.sleep(5)
+time.sleep(2)
 
-csv = driver.find_element(by=By.XPATH, value="//button[span[text()='CSV']]")
+csv = driver.find_element(by=By.XPATH, value="//button[span[text()='BibTeX']]")
 print('encontrado')
 csv.click()
 print('click')
@@ -134,13 +126,19 @@ fromData.send_keys('1')
     
 toData = driver.find_element(By.CSS_SELECTOR, value="input[placeholder=To]")
 toData.send_keys(str(docs))
-    
+
 time.sleep(2)
+
+abstract = driver.find_element(By.ID, 'field_group_abstact')
+abstract.click()
+
+time.sleep(2)
+
 submit_button = driver.find_element(By.CSS_SELECTOR, "button[data-testid='submit-export-button']")
 if submit_button.is_enabled():
     submit_button.click()
 
-time.sleep(10)
+time.sleep(5)
 
 progress_bar = driver.find_element(By.CSS_SELECTOR, "progress.PercentageBar-module__98Jio")
 percent = float(progress_bar.get_attribute("value"))
