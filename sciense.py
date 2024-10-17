@@ -2,7 +2,6 @@
 import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-import re
 import os
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options

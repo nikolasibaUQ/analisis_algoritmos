@@ -137,7 +137,7 @@ time.sleep(20)
 
 
 
-
+#pb-page-content > div > div > main > div.content.search-page > div > div > div > div.search-result.doSearch > nav > ul > li.page-item__arrow--next.pagination__item > a > i
 
 # while i <= int(max_pages):
 #     # checkbox = driver.find_element(By.ID, "select-all-results")
