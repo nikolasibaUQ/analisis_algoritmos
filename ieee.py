@@ -15,10 +15,10 @@ load_dotenv()
 
 
 
-# download_dir = "/Users/NicolasCw/Desktop/desarrollo/analisis_algoritmos/assets" 
+download_dir = "/Users/NicolasCw/Desktop/desarrollo/analisis_algoritmos/assets" 
 #TODO: cambiar la ruta de descarga dependiendo del sistema 
 # operativo winndows o mac os cada ruta depdende de donde almaceno el proyecto 
-download_dir = r"E:\celuweb\analisis_algoritmos\assets\IEEE"  # Cambia a la ruta correcta#
+# download_dir = r"E:\celuweb\analisis_algoritmos\assets\IEEE"  # Cambia a la ruta correcta#
 
 
 def wait_for_downloads(download_dir):
@@ -75,6 +75,8 @@ driver.implicitly_wait(10)
 # results_per_page_100 = driver.find_element(By.CSS_SELECTOR, "a[data-aa-name='srp-100-results-per-page']")
 # results_per_page_100.click()
 
+
+time.sleep(25)
 
 
 total_results_span = driver.find_element(By.XPATH, "(//span[@class='strong'])[2]")
