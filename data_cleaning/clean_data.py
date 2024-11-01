@@ -1,7 +1,7 @@
 import os
 import bibtexparser
 
-from normal_data import NormalData
+from data_models.normal_data import NormalData
 
 # # Función para leer un archivo .bib
 def leer_bibtex(filepath):
