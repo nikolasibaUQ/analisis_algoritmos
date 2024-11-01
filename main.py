@@ -1,13 +1,92 @@
 from data_fetching import ieee
-
+from data_cleaning import clean_data as cd
+import os
+import graficate.graficate as gr
 
 
 def main():
- ieee.donwloadData()
- 
- 
- 
- 
- 
+
+    #     print('init main')
+
+    # Especifica la carpeta que contiene los archivos .bib
+    #     carpeta_bib = 'assets/IEEE/'
+
+    # # Obtener todos los archivos .bib de la carpeta
+    #     archivos_bib = cd.obtener_archivos_bib(carpeta_bib)
+
+    # # # Especificar la carpeta donde se guardará el archivo combinado
+    #     carpeta_salida = 'assets/temps/'
+
+    # # # Especificar el nombre del archivo de salida
+    #     nombre_archivo_salida = 'IEEEFinal.bib'
+
+    # # Crear la ruta completa para el archivo de salida
+    #     ruta_completa_salida = os.path.join(carpeta_salida, nombre_archivo_salida)
+
+    # # Combinar los archivos .bib y guardar en la ruta especificada
+    #     cd.combinar_bibtex_sin_repetidos_por_titulo(
+    #         archivos_bib, ruta_completa_salida)
+
+    #     carpeta_bib = 'assets/sage/'
+
+    #     nombre_archivo_salida = 'SAGEFinal.bib'
+
+    #     ruta_completa_salida = os.path.join(carpeta_salida, nombre_archivo_salida)
+
+    #     archivos_bib = cd.obtener_archivos_bib(carpeta_bib)
+
+    #     cd.combinar_bibtex_sin_repetidos_por_titulo(
+    #         archivos_bib, ruta_completa_salida)
+
+    #     carpeta_bib = 'assets/sciense/'
+
+    #     nombre_archivo_salida = 'ScienceFinal.bib'
+
+    #     ruta_completa_salida = os.path.join(carpeta_salida, nombre_archivo_salida)
+    #     archivos_bib = cd.obtener_archivos_bib(carpeta_bib)
+
+    #     cd.combinar_bibtex_sin_repetidos_por_titulo(
+    #         archivos_bib, ruta_completa_salida)
+
+    #     carpeta_bib = 'assets/scopus/'
+    #     nombre_archivo_salida = 'ScopusFinal.bib'
+
+    #     ruta_completa_salida = os.path.join(carpeta_salida, nombre_archivo_salida)
+    #     archivos_bib = cd.obtener_archivos_bib(carpeta_bib)
+
+    #     cd.combinar_bibtex_sin_repetidos_por_titulo(
+    #         archivos_bib, ruta_completa_salida)
+
+    #     carpeta_bib = 'assets/temps/'
+    #     carpeta_salida = 'assets/final/'
+    #     nombre_archivo_salida = 'Final.bib'
+
+    #     ruta_completa_salida = os.path.join(carpeta_salida, nombre_archivo_salida)
+    #     archivos_bib = cd.obtener_archivos_bib(carpeta_bib)
+    #     cd.combinar_bibtex_sin_repetidos_por_titulo(
+    #         archivos_bib, ruta_completa_salida)
+
+    #     # Ruta del archivo .bib a procesar
+    #     bibtex_file_path = 'assets/final/Final.bib'
+
+    # # Leer el archivo .bib
+    #     bib_database = cd.leer_bibtex_con_mmap_regex(bibtex_file_path)
+
+    # # Convertir las entradas .bib a NormalData, eliminando campos vacíos
+    #     normaldata_entries = cd.convertir_a_normaldata(bib_database)
+
+    # # Especificar el archivo de salida donde se guardarán las entradas procesadas
+    #     archivo_salida = 'assets/final/normalizate_data.bib'
+
+    # # Escribir los datos filtrados en un nuevo archivo .bib
+    #     cd.escribir_bibtex(archivo_salida, normaldata_entries)
+
+    data = cd.leer_bibtex_con_mmap_regex('assets/final/Final.bib')
+    # gr.graficvate_databases(data=data)
+    # gr.graficate_year(data=data)
+    # gr.graficate_entetrype(data=data)
+    gr.graficate_journals(data=data)
+
+
 if __name__ == '__main__':
     main()
