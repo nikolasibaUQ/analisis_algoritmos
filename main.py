@@ -85,8 +85,12 @@ def main():
     # gr.graficvate_databases(data=data)
     # gr.graficate_year(data=data)
     # gr.graficate_entetrype(data=data)
-    gr.graficate_journals(data=data)
-
+    # gr.graficate_journals(data=data)
+    # gr.graficate_authors(data=data)
+    # gr.graficate_journal_year(data=data)
+    # gr.graficate_type_database(data=data)
+    gr.graficate_words(data=data)
+    
 
 if __name__ == '__main__':
     main()

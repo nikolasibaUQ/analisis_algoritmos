@@ -130,7 +130,7 @@ def convertir_a_normaldata(entries):
         pages = entry.get('pages', 1)  # Asigna 1 si no existe el campo 'pages'
         # Asigna 0 si no existe el campo 'volume'
         volume = entry.get('volume', 1)
-        entry_type = entry.get('ENTRYTYPE', None)
+        type = entry.get('type', None)
         journal = entry.get('journal', None)
         database = entry.get('database', None)
 
@@ -143,7 +143,7 @@ def convertir_a_normaldata(entries):
             # Crear instancia de NormalData solo con los campos que existan
             normaldata = NormalData(
                 author=author, title=title, abstract=abstract, year=year, volume=volume,
-                pages=pages, entry_type=entry_type, journal=journal, database=database)
+                pages=pages, type=type, journal=journal, database=database)
 
             # Añadir solo si tiene datos válidos
             if normaldata.get_data():

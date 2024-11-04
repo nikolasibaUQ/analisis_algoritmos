@@ -1,12 +1,12 @@
 class NormalData:
-    def __init__(self, author=None, title=None, abstract=None, year=None, volume=None, pages=None, entry_type='article', journal=None, database=None):
+    def __init__(self, author=None, title=None, abstract=None, year=None, volume=None, pages=None, type=None, journal=None, database=None):
         self.author = author
         self.title = title
         self.abstract = abstract
         self.year = year
         self.volume = volume
         self.pages = pages
-        self.entry_type = entry_type
+        self.entry_type = type
         self.journal = journal
         self.database = database
 
@@ -26,10 +26,11 @@ class NormalData:
             data['volume'] = self.volume
         if self.pages is not None:
             data['pages'] = self.pages
-        if self.entry_type:
-            data['ENTRYTYPE'] = self.entry_type
+        if self.type:
+            data['type'] = self.type
         if self.journal:
             data['journal'] = self.journal
         if self.database:
             data['database'] = self.database
+        
         return data
