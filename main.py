@@ -84,13 +84,20 @@ def main():
     data = cd.leer_bibtex_con_mmap_regex('assets/final/Final.bib')
     # gr.graficvate_databases(data=data)
     # gr.graficate_year(data=data)
-    # gr.graficate_entetrype(data=data)
+    # gr.graficate_entertype(data=data)
     # gr.graficate_journals(data=data)
     # gr.graficate_authors(data=data)
+
     # gr.graficate_journal_year(data=data)
     # gr.graficate_type_database(data=data)
-    gr.graficate_words(data=data)
-    
+    # gr.graficate_words(data=data)
+    # gr.generate_table_words(data=data)
+    # gr.graficate_publisher(data=data)
+    # gr.graficate_top_cited_articles(data=data)
+    # gr.graficate_type_year(data=data)
+    # gr.graficate_author_database(data=data)
+    gr.heatmap_author_journals(data=data)
+
 
 if __name__ == '__main__':
     main()

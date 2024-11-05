@@ -1,10 +1,11 @@
 import textwrap
 import re
-from typing import List
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.cm as cm
 import data_models.data_lists as dl
+import pandas as pd
+import seaborn as sns
 
 
 # this funtion will take a bibtex file and generate a graph whit  databases
@@ -39,7 +40,7 @@ def graficvate_databases(data):
     plt.savefig('assets/graficas/databases.png')
 
 
-def graficate_year(data, interval=5):
+def graficate_year(data):
     years_count = {}
 
     for entry in data:
@@ -48,54 +49,76 @@ def graficate_year(data, interval=5):
             year = re.sub(r'\D', '', entry['year'])
             if year:  # Verifica que no esté vacío después de eliminar letras
                 year = int(year)
-                # Agrupar el año en intervalos
-                interval_start = (year // interval) * \
-                    interval  # Agrupa en el intervalo
-                years_count[interval_start] = years_count.get(
-                    interval_start, 0) + 1
+                # Contar cada año de forma individual sin agrupación
+                years_count[year] = years_count.get(year, 0) + 1
 
-    # Ordenar los intervalos de años y sus conteos
+    # Ordenar los años y sus conteos
     years, count_years = zip(*sorted(years_count.items()))
 
-    plt.figure(figsize=(15, 5))
-    plt.title('Years (Grouped by Intervals)')
-    plt.xlabel('Year Intervals')
-    plt.ylabel('Count')
+    plt.figure(figsize=(18, 6))
+    plt.plot(years, count_years, marker='o', linestyle='-', color='blue')
+    # Sombrear el área debajo de la línea
+    plt.fill_between(years, count_years, color='lightblue', alpha=0.5)
+    plt.title('Publications Over Time')
+    plt.xlabel('Years')
+    plt.ylabel('Number of Publications')
+    plt.grid(True, which='both', linestyle='--', linewidth=0.5, alpha=0.7)
 
-    # Crear el gráfico de barras
-    plt.bar(years, count_years, width=interval *
-            0.8, color='blue', align='center')
-
-    # Ajuste del eje x para mostrar cada intervalo
-    plt.xticks(years)  # Muestra solo los intervalos calculados en el eje x
+    # Ajuste del eje x para mostrar cada año
+    plt.xticks(years, rotation=45)
 
     # Guardar la figura
-    plt.savefig('assets/graficas/years.png')
+    plt.tight_layout()
+    plt.savefig('assets/graficas/years_timeline.png')
 
-# Llamar a la función con los datos
-# graficate_year(data)  # Asegúrate de tener los datos cargados en 'data'
+    plt.show()
 
 
-def graficate_entetrype(data):
+def graficate_entertype(data):
     enter_types = {}
     for entry in data:
         if 'type' in entry:
             enter_types[entry['type']] = enter_types.get(entry['type'], 0) + 1
 
-    # Crear una lista con los tipos de entradas y sus conteos
-    enter_types, count_enter_types = zip(*enter_types.items())
+    # Ordenar los tipos de entrada por conteo en orden descendente
+    sorted_enter_types = sorted(
+        enter_types.items(), key=lambda x: x[1], reverse=True)
+
+    # Desempaquetar los datos
+    enter_types, count_enter_types = zip(*sorted_enter_types)
+
+    # Envolver los textos largos con textwrap
+    enter_types_wrapped = [textwrap.fill(
+        etype, width=20) for etype in enter_types]
 
     # Crear la figura y los ejes
-    fig, ax = plt.subplots(figsize=(10, 5))
+    fig, ax = plt.subplots(figsize=(12, 10))
     plt.title('Entry Types')
-    plt.xlabel('Entry Types')
-    plt.ylabel('Count')
+    plt.xlabel('Count')
+    plt.ylabel('Entry Types')
 
-    # Crear el gráfico de barras horizontal
-    ax.barh(enter_types, count_enter_types, color='green')
+    # Obtener una paleta de colores distinta para cada barra
+    cmap = cm.get_cmap('tab20', len(enter_types))
+    colors = [cmap(i) for i in range(len(enter_types))]
+
+    # Crear el gráfico de barras horizontal con colores diferentes
+    bars = ax.barh(enter_types_wrapped, count_enter_types, color=colors)
+
+    # Añadir la leyenda con los colores respectivos
+    ax.legend(bars, enter_types, title='Entry Types', bbox_to_anchor=(
+        1.05, 1), loc='upper left', fontsize=10, ncol=1)
+
+    # Invertir el eje y para que el tipo con más publicaciones esté arriba
+    ax.invert_yaxis()
+
+    # Ajustar el espaciado de la figura para que la leyenda no se corte
+    # Dejar más espacio a la derecha para la leyenda
+    plt.tight_layout(rect=[0, 0, 0.85, 1])
 
     # Guardar la figura
-    plt.savefig('assets/graficas/entry_types.png')
+    plt.savefig('assets/graficas/entry_types.png', bbox_inches='tight')
+
+    plt.show()
 
 
 def graficate_journals(data):
@@ -147,11 +170,9 @@ def graficate_authors(data):
     for entry in data:
         if 'author' in entry and entry['author'].strip():
             # Obtener solo el primer autor y formatear
-            # Tomar el primer autor de la lista
             first_author = entry['author'].split(' and ')[0].strip()
             # Formatear a 'inicial del nombre. apellido'
             parts = first_author.split()
-            # Verifica que parts no esté vacío y que parts[0] tenga contenido
             if parts and parts[0]:
                 formatted_author = f"{parts[0][0].lower()}. {' '.join(
                     parts[1:])}".lower() if len(parts) > 1 else parts[0].lower()
@@ -173,21 +194,22 @@ def graficate_authors(data):
     # Desempaquetar los datos de los 15 autores más citados
     authors, count_authors = zip(*top_authors)
 
+    # Obtener una paleta de colores distinta para cada barra
+    # Usar una paleta de colores que soporte múltiples colores
+    cmap = cm.get_cmap('tab20', len(authors))
+    colors = [cmap(i) for i in range(len(authors))]
     # Crear la figura y los ejes
     fig, ax = plt.subplots(figsize=(12, 7))
-
     plt.title('Top 15 Authors by Citations')
     plt.xlabel('Count')
     plt.ylabel('Authors')
-
-    # Crear el gráfico de barras horizontal
-    ax.barh(authors, count_authors, color='red')
-
+    # Crear el gráfico de barras horizontal con colores individuales
+    bars = ax.barh(authors, count_authors, color=colors)
     # Invertir el eje y para que el autor con más citaciones esté arriba
     ax.invert_yaxis()
 
     # Guardar la figura
-    plt.savefig('assets/graficas/authors.png')
+    plt.savefig('assets/graficas/authors.png', bbox_inches='tight')
 
 
 def graficate_journal_year(data):
@@ -456,7 +478,8 @@ def graficate_words(data):
     category_freq = {}
 
     for category, words in categories.items():
-        words = [word.lower() for word in words]  # Convertir todas las palabras a minúsculas
+        # Convertir todas las palabras a minúsculas
+        words = [word.lower() for word in words]
         # Contar la frecuencia total de las palabras de la categoría en todos los abstracts
         total_count = sum(
             sum(abstract.lower().count(word) for abstract in abstracts)
@@ -465,13 +488,15 @@ def graficate_words(data):
         category_freq[category] = total_count
 
     # Ordenar las categorías por frecuencia en orden descendente
-    sorted_categories = sorted(category_freq.items(), key=lambda x: x[1], reverse=True)
+    sorted_categories = sorted(
+        category_freq.items(), key=lambda x: x[1], reverse=True)
 
     # Desempaquetar los datos
     categories, count_categories = zip(*sorted_categories)
 
     # Envolver los nombres de las categorías largas
-    categories_wrapped = [textwrap.fill(category, width=20) for category in categories]
+    categories_wrapped = [textwrap.fill(
+        category, width=20) for category in categories]
 
     # Crear la figura y los ejes
     fig, ax = plt.subplots(figsize=(20, 20))
@@ -487,15 +512,309 @@ def graficate_words(data):
     bars = ax.barh(categories_wrapped, count_categories, color=colors)
 
     # Añadir la leyenda con los colores respectivos
-    ax.legend(bars, categories, title='Categories', bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=10, ncol=1)
+    ax.legend(bars, categories, title='Categories', bbox_to_anchor=(
+        1.05, 1), loc='upper left', fontsize=10, ncol=1)
 
     # Invertir el eje y para que la categoría con más frecuencia esté arriba
     ax.invert_yaxis()
 
     # Ajustar el espaciado de la figura para que la leyenda no se corte
-    plt.tight_layout(rect=[0, 0, 0.85, 1])  # Ajustar la posición del gráfico para dejar espacio a la leyenda
+    # Ajustar la posición del gráfico para dejar espacio a la leyenda
+    plt.tight_layout(rect=[0, 0, 0.85, 1])
 
     # Guardar la figura
     plt.savefig('assets/graficas/words_by_category.png', bbox_inches='tight')
 
+    plt.show()
+
+
+def generate_table_words(data):
+    # Obtener todos los abstracts
+    abstracts = [entry['abstract'] for entry in data if 'abstract' in entry]
+
+    # Definir las categorías y sus listas de palabras
+    categories = {
+        'Habilities': dl.DataLists.habilities,
+        'Computational Concepts': dl.DataLists.computal_concepts,
+        'Attitudes': dl.DataLists.actitudes,
+        'Psychometric Properties': dl.DataLists.psychometric_properties,
+        'Evaluation Tools': dl.DataLists.evaluation_tools,
+        'Investigation Design': dl.DataLists.investigation_design,
+        'Schooling Level': dl.DataLists.schooling_level,
+        'Medium': dl.DataLists.medio,
+        'Strategy': dl.DataLists.strategy,
+        'Tools': dl.DataLists.tools
+    }
+
+    # Contador de frecuencia por categoría
+    category_freq = {}
+
+    for category, words in categories.items():
+        # Convertir todas las palabras a minúsculas
+        words = [word.lower() for word in words]
+        # Contar la frecuencia total de las palabras de la categoría en todos los abstracts
+        total_count = sum(
+            sum(abstract.lower().count(word) for abstract in abstracts)
+            for word in words
+        )
+        category_freq[category] = total_count
+
+    # Ordenar las categorías por frecuencia en orden descendente
+    sorted_categories = sorted(
+        category_freq.items(), key=lambda x: x[1], reverse=True)
+
+    # Crear un DataFrame de pandas para mostrar los datos en forma de tabla
+    df = pd.DataFrame(sorted_categories, columns=['Category', 'Count'])
+
+    # Mostrar la tabla como una gráfica usando matplotlib
+    # Ajusta el tamaño de la figura según lo necesites
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.axis('tight')
+    ax.axis('off')
+
+    # Agregar la tabla a la figura
+    table = ax.table(cellText=df.values, colLabels=df.columns,
+                     cellLoc='center', loc='center')
+
+    # Ajustar el tamaño de la fuente de la tabla
+    table.auto_set_font_size(False)
+    table.set_fontsize(10)
+    table.scale(1, 1.5)  # Ajustar el escalado de la tabla si es necesario
+
+    # Guardar la imagen de la tabla
+    plt.savefig('assets/graficas/words_by_category_table.png',
+                bbox_inches='tight')
+
+
+def graficate_publisher(data):
+    publisher = {}
+
+    for entry in data:
+        if 'publisher' in entry:
+            publisher[entry['publisher']] = publisher.get(
+                entry['publisher'], 0) + 1
+
+    # Ordenar los publishers por el número de apariciones en orden descendente
+    sorted_publisher = sorted(
+        publisher.items(), key=lambda x: x[1], reverse=True)
+
+    # Desempaquetar los datos
+    publisher, count_publisher = zip(*sorted_publisher)
+
+    # Ajustar los nombres de los publishers largos con saltos de línea
+    publisher_wrapped = [textwrap.fill(publisher, width=30)
+                         for publisher in publisher]
+
+    # Crear la figura y los ejes
+
+    fig, ax = plt.subplots(figsize=(24, 20))
+    plt.title('Publishers')
+    plt.xlabel('Count')
+    plt.ylabel('Publishers')
+
+    # crear escala de colores
+    cmap = cm.get_cmap('tab20', len(publisher))
+    colors = [cmap(i) for i in range(len(publisher))]
+
+    # Crear el gráfico de barras horizontal
+    ax.barh(publisher_wrapped, count_publisher, color=colors)
+
+    # Invertir el eje y para que el publisher con más citaciones esté arriba
+    ax.invert_yaxis()
+
+    # Ajustar el espaciado de las etiquetas para que no se superpongan
+    plt.tight_layout()
+
+    # Guardar la figura
+    plt.savefig('assets/graficas/publishers.png')
+
+
+def graficate_top_cited_articles(data):
+    # Extraer los títulos y la cantidad de citaciones de los artículos
+    articles = [(entry['title'], int(entry['citations']))
+                for entry in data if 'title' in entry and 'citations' in entry]
+
+    # Ordenar los artículos por cantidad de citaciones en orden descendente y tomar los 15 primeros
+    top_articles = sorted(articles, key=lambda x: x[1], reverse=True)[:15]
+
+    # Verificar si hay suficientes datos
+    if not top_articles:
+        print("No hay suficientes artículos con datos de citaciones para graficar.")
+        return
+
+    # Crear un DataFrame para facilitar la manipulación y visualización
+    df = pd.DataFrame(top_articles, columns=['Title', 'Citations'])
+
+    # Envolver los títulos largos para que se vean mejor
+    df['Title'] = df['Title'].apply(lambda x: '\n'.join(
+        x[i:i+50] for i in range(0, len(x), 50)))
+
+    # Crear la gráfica de barras horizontal
+    fig, ax = plt.subplots(figsize=(15, 10))
+    ax.barh(df['Title'], df['Citations'], color='skyblue')
+
+    # Ajustar la visualización
+    ax.set_title('Top 15 Most Cited Articles', fontsize=16)
+    ax.set_xlabel('Citations', fontsize=14)
+    ax.set_ylabel('Articles', fontsize=14)
+    ax.invert_yaxis()  # Invertir el eje y para que el artículo más citado esté arriba
+
+    # Guardar la figura
+    plt.tight_layout()
+    plt.savefig('assets/graficas/top_cited_articles.png', bbox_inches='tight')
+
+
+def graficate_type_year(data):
+    type_year_count = {}
+
+    # Contar la cantidad de publicaciones por tipo y año
+    for entry in data:
+        if 'type' in entry and 'year' in entry:
+            pub_type = entry['type'].strip()
+            # Extraer solo los caracteres numéricos del año
+            year = re.sub(r'\D', '', entry['year'])
+            if year:
+                year = int(year)
+                type_year_count[(pub_type, year)] = type_year_count.get(
+                    (pub_type, year), 0) + 1
+
+    # Convertir el diccionario a un DataFrame de pandas para facilitar la visualización
+    df = pd.DataFrame.from_dict(type_year_count, orient='index', columns=[
+                                'Count']).reset_index()
+    df[['Type', 'Year']] = pd.DataFrame(df['index'].tolist(), index=df.index)
+    df = df.drop(columns='index')
+
+    # Mostrar solo los últimos 20 años
+    df = df[df['Year'] >= (max(df['Year']) - 35)]
+
+    # Pivotar el DataFrame para que los tipos de publicaciones sean columnas
+    df_pivot = df.pivot(index='Year', columns='Type', values='Count').fillna(0)
+
+    # Crear la gráfica de barras apiladas
+    df_pivot.plot(kind='bar', stacked=True, figsize=(18, 8), colormap='tab20')
+
+    plt.title('Publications by Type and Year')
+    plt.xlabel('Year')
+    plt.ylabel('Number of Publications')
+    plt.legend(title='Type', bbox_to_anchor=(1.05, 1), loc='upper left')
+    plt.xticks(rotation=45)
+
+    # Guardar la figura
+    plt.tight_layout()
+    plt.savefig('assets/graficas/type_year.png')
+
+
+def graficate_author_database(data):
+    author_database_count = {}
+
+    for entry in data:
+        if 'author' in entry and entry['author'].strip() and 'database' in entry:
+            # Obtener solo el primer autor y formatear
+            first_author = entry['author'].split(' and ')[0].strip()
+            parts = first_author.split()
+            if parts and parts[0]:
+                formatted_author = f"{parts[0][0].lower()}. {' '.join(
+                    parts[1:])}".lower() if len(parts) > 1 else parts[0].lower()
+            else:
+                formatted_author = "unknown"
+
+            database = entry['database'].strip()
+
+            # Contar las publicaciones por autor y base de datos
+            if formatted_author not in author_database_count:
+                author_database_count[formatted_author] = {}
+            author_database_count[formatted_author][database] = author_database_count[formatted_author].get(
+                database, 0) + 1
+
+    # Limitar a los 15 autores más mencionados
+    top_authors = sorted(author_database_count.keys(), key=lambda author: sum(
+        author_database_count[author].values()), reverse=True)[:15]
+
+    # Crear la matriz de conteo
+    databases = list(set(db for counts in author_database_count.values()
+                     for db in counts.keys()))
+    count_matrix = np.zeros((len(top_authors), len(databases)))
+
+    for i, author in enumerate(top_authors):
+        for j, db in enumerate(databases):
+            count_matrix[i, j] = author_database_count[author].get(db, 0)
+
+    # Crear la figura y los ejes
+    fig, ax = plt.subplots(figsize=(18, 10))
+    colors = plt.cm.tab20.colors  # Usar una paleta de colores
+
+    # Graficar cada base de datos como una barra apilada en cada autor
+    for j, db in enumerate(databases):
+        ax.barh(top_authors, count_matrix[:, j], label=textwrap.fill(db, width=15), left=np.sum(
+            count_matrix[:, :j], axis=1), color=colors[j % len(colors)])
+
+    plt.title('Top 15 Authors by Database')
+    plt.xlabel('Number of Publications')
+    plt.ylabel('Authors')
+    ax.invert_yaxis()
+    plt.xticks(rotation=45)
+    plt.legend(title='Database', bbox_to_anchor=(1.05, 1), loc='upper left')
+
+    # Ajustar el espaciado para que la leyenda no se corte
+    plt.tight_layout()
+
+    # Guardar la figura
+    plt.savefig('assets/graficas/author_database.png', bbox_inches='tight')
+
+    plt.show()
+
+
+
+
+def heatmap_author_journals(data, top_n_authors=20, top_n_journals=20, min_publications=2):
+    import seaborn as sns
+    import pandas as pd
+    import matplotlib.pyplot as plt
+
+    # Contador de publicaciones por autor y journal
+    author_journal_count = {}
+    for entry in data:
+        if 'author' in entry and 'journal' in entry:
+            first_author = entry['author'].split(' and ')[0].strip()
+            parts = first_author.split()
+            if parts and parts[0]:  # Verificar que parts no esté vacío y que parts[0] tenga contenido
+                formatted_author = f"{parts[0][0].lower()}. {' '.join(parts[1:])}".lower() if len(parts) > 1 else parts[0].lower()
+            else:
+                formatted_author = "unknown"  # Valor predeterminado si no hay autor válido
+
+            journal = entry['journal'].strip()
+
+            if journal not in author_journal_count:
+                author_journal_count[journal] = {}
+            author_journal_count[journal][formatted_author] = author_journal_count[journal].get(formatted_author, 0) + 1
+
+    # Convertir a DataFrame para la visualización en el heatmap
+    df = pd.DataFrame(author_journal_count).fillna(0)
+
+    # Filtrar los autores y journals con más de 'min_publications' publicaciones
+    filtered_journals = df.columns[(df > 0).sum(axis=0) >= min_publications]
+    filtered_authors = df.index[(df > 0).sum(axis=1) >= min_publications]
+    df_filtered = df.loc[filtered_authors, filtered_journals]
+
+    # Limitar el número de autores y journals a los top_n más relevantes
+    top_journals = df_filtered.sum(axis=0).sort_values(ascending=False).head(top_n_journals).index
+    top_authors = df_filtered.sum(axis=1).sort_values(ascending=False).head(top_n_authors).index
+    df_filtered = df_filtered.loc[top_authors, top_journals]
+
+    # Verificar si la matriz filtrada no está vacía
+    if df_filtered.empty:
+        print("No hay suficientes datos para generar un heatmap poblado.")
+        return
+
+    # Crear el heatmap
+    plt.figure(figsize=(15, 10))
+    sns.heatmap(df_filtered, annot=True, fmt="g", cmap='viridis')
+    plt.title('Publications by Author and Journal')
+    plt.xlabel('Journals')
+    plt.ylabel('Authors')
+    plt.xticks(rotation=45, ha='right')
+    plt.tight_layout()
+
+    # Guardar la figura
+    plt.savefig('assets/graficas/author_journal_heatmap.png')
     plt.show()
