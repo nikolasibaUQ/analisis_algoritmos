@@ -629,40 +629,59 @@ def graficate_publisher(data):
     plt.savefig('assets/graficas/publishers.png')
 
 
-def graficate_top_cited_articles(data):
-    # Extraer los títulos y la cantidad de citaciones de los artículos
-    articles = [(entry['title'], int(entry['citations']))
-                for entry in data if 'title' in entry and 'citations' in entry]
+def graficate_top_cited(data):
+    citations = {}
 
-    # Ordenar los artículos por cantidad de citaciones en orden descendente y tomar los 15 primeros
-    top_articles = sorted(articles, key=lambda x: x[1], reverse=True)[:15]
+    # Extraer el número de citaciones del campo "note"
+    for entry in data:
+        if 'note' in entry:
+            note = entry['note']
+            # Usar una expresión regular para extraer el número de citaciones
+            match = re.search(r'Cited by:\s*(\d+)', note)
+            if match:
+                citation_count = int(match.group(1))
+                # Almacenar el título y el número de citaciones
+                title = entry.get('title', 'Unknown Title')
+                citations[title] = citation_count
 
-    # Verificar si hay suficientes datos
-    if not top_articles:
-        print("No hay suficientes artículos con datos de citaciones para graficar.")
-        return
+    # Ordenar los artículos por el número de citaciones en orden descendente y tomar los 15 primeros
+    top_cited = sorted(citations.items(), key=lambda x: x[1], reverse=True)[:15]
 
-    # Crear un DataFrame para facilitar la manipulación y visualización
-    df = pd.DataFrame(top_articles, columns=['Title', 'Citations'])
+    # Desempaquetar los títulos y las citaciones
+    titles, counts = zip(*top_cited)
 
-    # Envolver los títulos largos para que se vean mejor
-    df['Title'] = df['Title'].apply(lambda x: '\n'.join(
-        x[i:i+50] for i in range(0, len(x), 50)))
+    # Envolver títulos largos para mejorar la legibilidad
+    wrapped_titles = [textwrap.fill(title, width=50) for title in titles]
 
-    # Crear la gráfica de barras horizontal
-    fig, ax = plt.subplots(figsize=(15, 10))
-    ax.barh(df['Title'], df['Citations'], color='skyblue')
+    # Crear la gráfica de barras
+    fig, ax = plt.subplots(figsize=(12, 10))  # Tamaño ajustado para mejorar la legibilidad
+    colors = cm.get_cmap('tab20', len(counts))(range(len(counts)))  # Colores individuales para cada barra
+    bars = ax.barh(wrapped_titles, counts, color=colors)
+    ax.invert_yaxis()  # El artículo más citado estará en la parte superior
 
-    # Ajustar la visualización
-    ax.set_title('Top 15 Most Cited Articles', fontsize=16)
-    ax.set_xlabel('Citations', fontsize=14)
-    ax.set_ylabel('Articles', fontsize=14)
-    ax.invert_yaxis()  # Invertir el eje y para que el artículo más citado esté arriba
+    plt.title('Top 15 Most Cited Articles', fontsize=16)
+    plt.xlabel('Number of Citations', fontsize=14)
+    plt.ylabel('Articles', fontsize=14)
+
+    # Ajuste de etiquetas
+    ax.tick_params(axis='y', labelsize=10)  # Tamaño de las etiquetas del eje Y
+
+    # Ajuste del espaciado para evitar superposiciones
+    plt.tight_layout()
+
+    # Añadir una leyenda (opcional, si se desea indicar la posición)
+    for bar, count in zip(bars, counts):
+        ax.text(bar.get_width() + 400, bar.get_y() + bar.get_height()/2,  # Ajuste de posición
+                f'{count}', ha='center', va='center', fontsize=10, color='black')
 
     # Guardar la figura
-    plt.tight_layout()
     plt.savefig('assets/graficas/top_cited_articles.png', bbox_inches='tight')
+    plt.show()
 
+
+
+    
+    
 
 def graficate_type_year(data):
     type_year_count = {}

@@ -2,6 +2,7 @@ from data_fetching import ieee
 from data_cleaning import clean_data as cd
 import os
 import graficate.graficate as gr
+import graficate.tree_graficate as gt
 
 
 def main():
@@ -96,7 +97,9 @@ def main():
     # gr.graficate_top_cited_articles(data=data)
     # gr.graficate_type_year(data=data)
     # gr.graficate_author_database(data=data)
-    gr.heatmap_author_journals(data=data)
+    # gr.heatmap_author_journals(data=data)
+    # gr.graficate_top_cited(data=data)
+    gt.build_graph(data)
 
 
 if __name__ == '__main__':
