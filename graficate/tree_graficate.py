@@ -91,14 +91,6 @@ def build_graph(data):
     plt.show()
 
 
-
-
-import networkx as nx
-import matplotlib.pyplot as plt
-from collections import Counter
-import re
-import random
-
 def extract_journal_data(data):
     """Extrae el journal o ISSN y cuenta los artículos por cada uno."""
     journal_counts = {}
