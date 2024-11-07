@@ -89,7 +89,7 @@ def main():
     # gr.graficate_journals(data=data)
     # gr.graficate_authors(data=data)
     # gr.stacked_bar_journal_entry_type_inverted(data=data)
-    gr.heatmap_journal_entry_type_wrapped(data=data)
+    # gr.heatmap_journal_entry_type_wrapped(data=data)
 
     # gr.graficate_journal_year(data=data)
     # gr.graficate_type_database(data=data)
@@ -102,6 +102,7 @@ def main():
     # gr.heatmap_author_journals(data=data)
     # gr.graficate_top_cited(data=data)
     # gt.build_graph(data)
+    gt.build_separate_trees(data)
 
 
 if __name__ == '__main__':

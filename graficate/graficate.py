@@ -661,7 +661,7 @@ def graficate_publisher(data):
 
     # Añadir el valor al final de cada barra
     for bar, count in zip(bars, count_publishers):
-        ax.text(bar.get_width() + 10, bar.get_y() + bar.get_height()/2, str(count),
+        ax.text(bar.get_width() + 2, bar.get_y() + bar.get_height()/2, str(count),
                 va='center', ha='left', fontsize=10)
 
     # Invertir el eje y para que el publisher con más citaciones esté arriba
