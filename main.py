@@ -102,7 +102,9 @@ def main():
     # gr.heatmap_author_journals(data=data)
     # gr.graficate_top_cited(data=data)
     # gt.build_graph(data)
-    gt.build_separate_trees(data)
+    # gt.build_separate_trees(data)
+    gr.authors_by_country(data=data)
+    
 
 
 if __name__ == '__main__':

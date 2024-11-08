@@ -6,6 +6,8 @@ import matplotlib.cm as cm
 import data_models.data_lists as dl
 import pandas as pd
 import seaborn as sns
+import random
+import networkx as nx
 
 
 # this funtion will take a bibtex file and generate a graph whit  databases
@@ -975,3 +977,63 @@ def heatmap_journal_entry_type_wrapped(data, top_n_journals=10):
     # Guardar la figura
     plt.savefig('assets/graficas/journal_article.png', bbox_inches='tight')
     plt.show()
+    
+    
+
+
+from collections import Counter
+
+def authors_by_country(data):
+    # Lista de países para asignación aleatoria
+    countries = ["USA", "UK", "Canada", "Germany", "France", "Australia", "Spain", "Italy", "Japan", "Brazil"]
+    author_country = {}
+
+    for entry in data:
+        if 'author' in entry and entry['author'].strip():
+            # Obtener solo el primer autor y formatearlo como 'inicial del nombre. apellido'
+            first_author = entry['author'].split(' and ')[0].strip()
+            parts = first_author.split()
+            if parts and parts[0]:
+                formatted_author = f"{parts[0][0].lower()}. {' '.join(parts[1:])}".lower()
+            else:
+                formatted_author = "unknown"
+            
+            # Asignar un país aleatorio al autor
+            author_country[formatted_author] = random.choice(countries)
+
+    # Contar la cantidad de autores por país y ordenar de forma descendente
+    country_counts = Counter(author_country.values())
+    sorted_countries = country_counts.most_common()
+
+    # Desempaquetar los datos para la gráfica
+    countries, counts = zip(*sorted_countries)
+
+    # Crear colores para cada país
+    cmap = plt.get_cmap("tab10")  # Usar un colormap con colores distintos
+    colors = [cmap(i) for i in range(len(countries))]
+
+    # Crear el gráfico de barras
+    plt.figure(figsize=(12, 7))
+    bars = plt.bar(countries, counts, color=colors)
+    plt.title('Cantidad de Autores por País')
+    plt.xlabel('País')
+    plt.ylabel('Cantidad de Autores')
+
+    # Añadir etiquetas encima de cada barra
+    for i, count in enumerate(counts):
+        plt.text(i, count + 0.5, str(count), ha='center', va='bottom')
+
+    # Crear la leyenda
+    legend_elements = [plt.Line2D([0], [0], marker='o', color='w', label=country,
+                                  markerfacecolor=color, markersize=10) for country, color in zip(countries, colors)]
+    plt.legend(handles=legend_elements, title="País", bbox_to_anchor=(1.05, 1), loc='upper left')
+
+    # Ajustar el espaciado de la figura para que la leyenda no se corte
+    plt.tight_layout(rect=[0, 0, 0.85, 1])
+
+    # Guardar y mostrar la figura
+    plt.savefig('assets/graficas/authors_by_country.png', bbox_inches='tight')
+    plt.show()
+
+# Supongamos que 'data' es tu conjunto de datos de entrada
+# authors_by_country(data)

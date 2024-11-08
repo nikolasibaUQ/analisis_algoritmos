@@ -91,17 +91,6 @@ def build_graph(data):
     plt.show()
 
 
-def extract_journal_data(data):
-    """Extrae el journal o ISSN y cuenta los artículos por cada uno."""
-    journal_counts = {}
-    for entry in data:
-        journal = entry.get('journal') or entry.get('issn', 'Unknown ISSN')
-        if journal:
-            journal_counts[journal] = journal_counts.get(journal, 0) + 1
-    # Seleccionar los 10 journals con más artículos
-    top_journals = dict(Counter(journal_counts).most_common(10))
-    return top_journals
-
 def get_top_cited_articles(journal, data):
     """Obtiene los 15 artículos más citados de un journal o ISSN."""
     articles = []
