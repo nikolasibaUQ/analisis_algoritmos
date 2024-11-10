@@ -1,4 +1,4 @@
-from data_fetching import ieee
+from data_fetching import ieee , sage , scopus, sciense
 from data_cleaning import clean_data as cd
 import os
 import graficate.graficate as gr
@@ -7,27 +7,34 @@ from flask import Flask
 from flask import Flask, render_template, request
 
 
-app = Flask(__name__)
+# sage.download_sage_articles()
+# scopus.download_scopus_articles()
+# sciense.download_sciense_articles()
+ieee.donwloadData()
 
 
-# Definir una ruta básica para la página de inicio
-@app.route("/")
-def home():
-    return render_template('template.html')
+
+# app = Flask(__name__)
 
 
-@app.route("/detalle")
-def second():
+# # Definir una ruta básica para la página de inicio
+# @app.route("/")
+# def home():
+#     return render_template('template.html')
+
+
+# @app.route("/detalle")
+# def second():
     
-    title = request.args.get('title', 'Detalle del ítem')
-    img = request.args.get('img', 'imagen')
-    return render_template('secondary.html', title=title, img=img)
+#     title = request.args.get('title', 'Detalle del ítem')
+#     img = request.args.get('img', 'imagen')
+#     return render_template('secondary.html', title=title, img=img)
 
 
 
-# Ejecutar la aplicación si este archivo es el principal
-if __name__ == "__main__":
-    app.run()
+# # Ejecutar la aplicación si este archivo es el principal
+# if __name__ == "__main__":
+#     app.run()
 
 # def main():
 
