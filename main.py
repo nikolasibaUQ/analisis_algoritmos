@@ -27,7 +27,7 @@ def second():
 
 # Ejecutar la aplicación si este archivo es el principal
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run()
 
 # def main():
 
