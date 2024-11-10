@@ -3,109 +3,133 @@ from data_cleaning import clean_data as cd
 import os
 import graficate.graficate as gr
 import graficate.tree_graficate as gt
+from flask import Flask
+from flask import Flask, render_template, request
 
 
-def main():
+app = Flask(__name__)
 
-    #     print('init main')
 
-    # Especifica la carpeta que contiene los archivos .bib
-    #     carpeta_bib = 'assets/IEEE/'
+# Definir una ruta básica para la página de inicio
+@app.route("/")
+def home():
+    return render_template('template.html')
 
-    # # Obtener todos los archivos .bib de la carpeta
-    #     archivos_bib = cd.obtener_archivos_bib(carpeta_bib)
 
-    # # # Especificar la carpeta donde se guardará el archivo combinado
-    #     carpeta_salida = 'assets/temps/'
+@app.route("/detalle")
+def second():
+    
+    title = request.args.get('title', 'Detalle del ítem')
+    img = request.args.get('img', 'imagen')
+    return render_template('secondary.html', title=title, img=img)
 
-    # # # Especificar el nombre del archivo de salida
-    #     nombre_archivo_salida = 'IEEEFinal.bib'
 
-    # # Crear la ruta completa para el archivo de salida
-    #     ruta_completa_salida = os.path.join(carpeta_salida, nombre_archivo_salida)
 
-    # # Combinar los archivos .bib y guardar en la ruta especificada
-    #     cd.combinar_bibtex_sin_repetidos_por_titulo(
-    #         archivos_bib, ruta_completa_salida)
+# Ejecutar la aplicación si este archivo es el principal
+if __name__ == "__main__":
+    app.run(debug=False)
 
-    #     carpeta_bib = 'assets/sage/'
+# def main():
 
-    #     nombre_archivo_salida = 'SAGEFinal.bib'
+#     #     print('init main')
 
-    #     ruta_completa_salida = os.path.join(carpeta_salida, nombre_archivo_salida)
+#     # Especifica la carpeta que contiene los archivos .bib
+#     #     carpeta_bib = 'assets/IEEE/'
 
-    #     archivos_bib = cd.obtener_archivos_bib(carpeta_bib)
+#     # # Obtener todos los archivos .bib de la carpeta
+#     #     archivos_bib = cd.obtener_archivos_bib(carpeta_bib)
 
-    #     cd.combinar_bibtex_sin_repetidos_por_titulo(
-    #         archivos_bib, ruta_completa_salida)
+#     # # # Especificar la carpeta donde se guardará el archivo combinado
+#     #     carpeta_salida = 'assets/temps/'
 
-    #     carpeta_bib = 'assets/sciense/'
+#     # # # Especificar el nombre del archivo de salida
+#     #     nombre_archivo_salida = 'IEEEFinal.bib'
 
-    #     nombre_archivo_salida = 'ScienceFinal.bib'
+#     # # Crear la ruta completa para el archivo de salida
+#     #     ruta_completa_salida = os.path.join(carpeta_salida, nombre_archivo_salida)
 
-    #     ruta_completa_salida = os.path.join(carpeta_salida, nombre_archivo_salida)
-    #     archivos_bib = cd.obtener_archivos_bib(carpeta_bib)
+#     # # Combinar los archivos .bib y guardar en la ruta especificada
+#     #     cd.combinar_bibtex_sin_repetidos_por_titulo(
+#     #         archivos_bib, ruta_completa_salida)
 
-    #     cd.combinar_bibtex_sin_repetidos_por_titulo(
-    #         archivos_bib, ruta_completa_salida)
+#     #     carpeta_bib = 'assets/sage/'
 
-    #     carpeta_bib = 'assets/scopus/'
-    #     nombre_archivo_salida = 'ScopusFinal.bib'
+#     #     nombre_archivo_salida = 'SAGEFinal.bib'
 
-    #     ruta_completa_salida = os.path.join(carpeta_salida, nombre_archivo_salida)
-    #     archivos_bib = cd.obtener_archivos_bib(carpeta_bib)
+#     #     ruta_completa_salida = os.path.join(carpeta_salida, nombre_archivo_salida)
 
-    #     cd.combinar_bibtex_sin_repetidos_por_titulo(
-    #         archivos_bib, ruta_completa_salida)
+#     #     archivos_bib = cd.obtener_archivos_bib(carpeta_bib)
 
-    #     carpeta_bib = 'assets/temps/'
-    #     carpeta_salida = 'assets/final/'
-    #     nombre_archivo_salida = 'Final.bib'
+#     #     cd.combinar_bibtex_sin_repetidos_por_titulo(
+#     #         archivos_bib, ruta_completa_salida)
 
-    #     ruta_completa_salida = os.path.join(carpeta_salida, nombre_archivo_salida)
-    #     archivos_bib = cd.obtener_archivos_bib(carpeta_bib)
-    #     cd.combinar_bibtex_sin_repetidos_por_titulo(
-    #         archivos_bib, ruta_completa_salida)
+#     #     carpeta_bib = 'assets/sciense/'
 
-    #     # Ruta del archivo .bib a procesar
-    #     bibtex_file_path = 'assets/final/Final.bib'
+#     #     nombre_archivo_salida = 'ScienceFinal.bib'
 
-    # # Leer el archivo .bib
-    #     bib_database = cd.leer_bibtex_con_mmap_regex(bibtex_file_path)
+#     #     ruta_completa_salida = os.path.join(carpeta_salida, nombre_archivo_salida)
+#     #     archivos_bib = cd.obtener_archivos_bib(carpeta_bib)
 
-    # # Convertir las entradas .bib a NormalData, eliminando campos vacíos
-    #     normaldata_entries = cd.convertir_a_normaldata(bib_database)
+#     #     cd.combinar_bibtex_sin_repetidos_por_titulo(
+#     #         archivos_bib, ruta_completa_salida)
 
-    # # Especificar el archivo de salida donde se guardarán las entradas procesadas
-    #     archivo_salida = 'assets/final/normalizate_data.bib'
+#     #     carpeta_bib = 'assets/scopus/'
+#     #     nombre_archivo_salida = 'ScopusFinal.bib'
 
-    # # Escribir los datos filtrados en un nuevo archivo .bib
-    #     cd.escribir_bibtex(archivo_salida, normaldata_entries)
+#     #     ruta_completa_salida = os.path.join(carpeta_salida, nombre_archivo_salida)
+#     #     archivos_bib = cd.obtener_archivos_bib(carpeta_bib)
 
-    data = cd.leer_bibtex_con_mmap_regex('assets/final/Final.bib')
-    # gr.graficvate_databases(data=data)
-    # gr.graficate_year(data=data)
-    # gr.graficate_entertype(data=data)
-    # gr.graficate_journals(data=data)
-    # gr.graficate_authors(data=data)
-    # gr.stacked_bar_journal_entry_type_inverted(data=data)
-    # gr.heatmap_journal_entry_type_wrapped(data=data)
+#     #     cd.combinar_bibtex_sin_repetidos_por_titulo(
+#     #         archivos_bib, ruta_completa_salida)
 
-    # gr.graficate_journal_year(data=data)
-    # gr.graficate_type_database(data=data)
-    # gr.graficate_words(data=data)
-    # gr.generate_table_words(data=data)
-    # gr.graficate_publisher(data=data)
-    # gr.graficate_top_cited_articles(data=data)
-    # gr.graficate_type_year(data=data)
-    # gr.graficate_author_database(data=data)
-    # gr.heatmap_author_journals(data=data)
-    # gr.graficate_top_cited(data=data)
-    # gt.build_graph(data)
-    # gt.build_separate_trees(data)
-    gr.authors_by_country(data=data)
+#     #     carpeta_bib = 'assets/temps/'
+#     #     carpeta_salida = 'assets/final/'
+#     #     nombre_archivo_salida = 'Final.bib'
+
+#     #     ruta_completa_salida = os.path.join(carpeta_salida, nombre_archivo_salida)
+#     #     archivos_bib = cd.obtener_archivos_bib(carpeta_bib)
+#     #     cd.combinar_bibtex_sin_repetidos_por_titulo(
+#     #         archivos_bib, ruta_completa_salida)
+
+#     #     # Ruta del archivo .bib a procesar
+#     #     bibtex_file_path = 'assets/final/Final.bib'
+
+#     # # Leer el archivo .bib
+#     #     bib_database = cd.leer_bibtex_con_mmap_regex(bibtex_file_path)
+
+#     # # Convertir las entradas .bib a NormalData, eliminando campos vacíos
+#     #     normaldata_entries = cd.convertir_a_normaldata(bib_database)
+
+#     # # Especificar el archivo de salida donde se guardarán las entradas procesadas
+#     #     archivo_salida = 'assets/final/normalizate_data.bib'
+
+#     # # Escribir los datos filtrados en un nuevo archivo .bib
+#     #     cd.escribir_bibtex(archivo_salida, normaldata_entries)
+
+#     data = cd.leer_bibtex_con_mmap_regex('assets/final/Final.bib')
+#     # gr.graficvate_databases(data=data)
+#     # gr.graficate_year(data=data)
+#     # gr.graficate_entertype(data=data)
+#     # gr.graficate_journals(data=data)
+#     # gr.graficate_authors(data=data)
+#     # gr.stacked_bar_journal_entry_type_inverted(data=data)
+#     # gr.heatmap_journal_entry_type_wrapped(data=data)
+
+#     # gr.graficate_journal_year(data=data)
+#     # gr.graficate_type_database(data=data)
+#     # gr.graficate_words(data=data)
+#     # gr.generate_table_words(data=data)
+#     # gr.graficate_publisher(data=data)
+#     # gr.graficate_top_cited_articles(data=data)
+#     # gr.graficate_type_year(data=data)
+#     # gr.graficate_author_database(data=data)
+#     # gr.heatmap_author_journals(data=data)
+#     # gr.graficate_top_cited(data=data)
+#     # gt.build_graph(data)
+#     # gt.build_separate_trees(data)
+#     gr.authors_by_country(data=data)
     
 
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()

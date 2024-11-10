@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis de Algoritmos</title>
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #333;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Encabezado */
+        .header {
+            background-color: #4CAF50;
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Subtítulo */
+        .subtitle {
+            font-size: 18px;
+            margin: 20px 0;
+        }
+
+        /* Contenedor de la cuadrícula */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            width: 90%;
+            max-width: 1200px;
+        }
+
+        /* Elemento de cuadrícula */
+        .grid-item {
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            text-decoration: none; /* Eliminar subrayado del enlace */
+        }
+
+        /* Icono */
+        .grid-item img {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 10px;
+        }
+
+        .white-icon {
+            filter: brightness(0) invert(1);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Encabezado principal -->
+    <div class="header">Análisis de algoritmos</div>
+
+    <!-- Subtítulo -->
+    <div class="subtitle">Requerimientos de la aplicación de análisis de algoritmos</div>
+
+    <!-- Contenedor de la cuadrícula -->
+    <div class="grid-container">
+        <a href="/detalle?title=primer%20autor%20del%20producto%20(15%20autores%20más%20citados)&img={{ url_for('static', filename='graficas/authors.png') }}" class="grid-item">
+            <img src="{{ url_for('static', filename='icons/grafico-de-linea.png') }}" alt="Icono" class="white-icon">
+            primer autor del producto (15 autores más citados)
+        </a>
+        <a href="/detalle?title=Años%20de%20publicación&img={{ url_for('static', filename='graficas/years_timeline.png') }}" class="grid-item">
+            <img src="{{ url_for('static', filename='icons/grafico-de-linea.png') }}" alt="Icono" class="white-icon">
+            Años de publicación
+        </a>
+        <a href="/detalle?title=Tipos%20de%20producto&img={{ url_for('static', filename='graficas/entry_types.png') }}" class="grid-item">
+            <img src="{{ url_for('static', filename='icons/grafico-de-linea.png') }}" alt="Icono" class="white-icon">
+            Tipos de producto
+        </a>
+        <a href="/detalle?title=Journal%20(15%20journals%20más%20citados)&img={{ url_for('static', filename='graficas/journals.png') }}" class="grid-item">
+            <img src="{{ url_for('static', filename='icons/grafico-de-linea.png') }}" alt="Icono" class="white-icon">
+            Journal (15 journals más citados)
+        </a>
+        <a href="/detalle?title=Publisher%20(15%20publishers%20más%20citados)&img={{ url_for('static', filename='graficas/publishers.png') }}" class="grid-item">
+            <img src="{{ url_for('static', filename='icons/grafico-de-linea.png') }}" alt="Icono" class="white-icon">
+            Publisher (15 publishers más citados)
+        </a>
+        <a href="/detalle?title=Registros%20por%20base%20de%20datos&img={{ url_for('static', filename='graficas/databases.png') }}" class="grid-item">
+            <img src="{{ url_for('static', filename='icons/grafico-de-linea.png') }}" alt="Icono" class="white-icon">
+            Registros por base de datos
+        </a>
+        <a href="/detalle?title=Cantidad%20de%20citas%20por%20artículo%20(15%20artículos%20más%20citados)&img={{ url_for('static', filename='graficas/top_cited_articles.png') }}" class="grid-item">
+            <img src="{{ url_for('static', filename='icons/grafico-de-linea.png') }}" alt="Icono" class="white-icon">
+            Cantidad de citas por artículo (15 artículos más citados)
+        </a>
+        <a href="/detalle?title=Tipo%20de%20producto%20-%20Año&img={{ url_for('static', filename='graficas/type_year.png') }}" class="grid-item">
+            <img src="{{ url_for('static', filename='icons/grafico-de-linea.png') }}" alt="Icono" class="white-icon">
+            Tipo de producto - Año
+        </a>
+        <a href="/detalle?title=Base%20de%20datos%20-%20Autor&img={{ url_for('static', filename='graficas/author_database.png') }}" class="grid-item">
+            <img src="{{ url_for('static', filename='icons/grafico-de-linea.png') }}" alt="Icono" class="white-icon">
+            Base de datos - Autor
+        </a>
+        <a href="/detalle?title=Journal%20-%20Artículo&img={{ url_for('static', filename='graficas/journal_article.png') }}" class="grid-item">
+            <img src="{{ url_for('static', filename='icons/grafico-de-linea.png') }}" alt="Icono" class="white-icon">
+            Journal - Artículo
+        </a>
+        <a href="/detalle?title=Autor%20-%20país&img={{ url_for('static', filename='graficas/author_journal_heatmap.png') }}" class="grid-item">
+            <img src="{{ url_for('static', filename='icons/grafico-de-linea.png') }}" alt="Icono" class="white-icon">
+            Autor - Journal
+        </a>
+        <a href="/detalle?title=Autor%20-%20país&img={{ url_for('static', filename='graficas/authors_by_country.png') }}" class="grid-item">
+            <img src="{{ url_for('static', filename='icons/grafico-de-linea.png') }}" alt="Icono" class="white-icon">
+            Autor - país
+        </a>
+        <a href="/detalle?title=Tabla%20de%20variables&img={{ url_for('static', filename='graficas/words_by_category_table.png') }}" class="grid-item">
+            <img src="{{ url_for('static', filename='icons/documento.png') }}" alt="Icono" class="white-icon">
+            Tabla de variables
+        </a>
+        <a href="/detalle?title=Nube%20de%20palabras&img={{ url_for('static', filename='graficas/words_by_category.png') }}" class="grid-item">
+            <img src="{{ url_for('static', filename='icons/nube.png') }}" alt="Icono" class="white-icon">
+            Nube de palabras
+        </a>
+        <a href="/detalle?title=Diagrama%20de%20árbol&img={{ url_for('static', filename='graficas/author_journal_heatmap_final.png') }}" class="grid-item">
+            <img src="{{ url_for('static', filename='icons/arbol.png') }}" alt="Icono" class="white-icon">
+            Diagrama de árbol
+        </a>
+        <a href="/detalle?title=Diagrama%20de%20árbol%20sin%20país&img={{ url_for('static', filename='graficas/author_journal_heatmap_optimized.png') }}" class="grid-item">
+            <img src="{{ url_for('static', filename='icons/arbol.png') }}" alt="Icono" class="white-icon">
+            Diagrama de árbol sin país
+        </a>
+    </div>
+
+</body>
+</html>
